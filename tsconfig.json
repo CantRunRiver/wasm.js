@@ -1,0 +1,29 @@
+{
+	"compilerOptions": {
+		"allowSyntheticDefaultImports": true,
+		"esModuleInterop": true,
+		"declaration": true,
+		"lib": [
+			"ES2021",
+			"DOM"
+		],
+		"module": "CommonJS",
+		"moduleResolution": "Node",
+		"outDir": "dist/",
+		"removeComments": true,
+		"skipLibCheck": true,
+		"strict": true,
+		"strictBindCallApply": true,
+		"strictFunctionTypes": true,
+		"strictNullChecks": true,
+		"strictPropertyInitialization": true,
+		"target": "ES2021",
+		"types": [
+			"node"
+		]
+	},
+	"exclude": [
+		"node_modules",
+		"dist/*"
+	]
+}
