@@ -6,7 +6,7 @@
 	"scripts": {
 		"build": "tsc & webpack --mode production",
 		"install": "npm run build",
-		"test": "npm run build & node ./test/parse/index.js"
+		"test": "npm run build"
 	},
 	"keywords": [
 		"WebAssembly"
