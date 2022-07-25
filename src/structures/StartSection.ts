@@ -44,6 +44,17 @@ export default class StartSection extends _Base {
 
 	/**
 	 * 
+	 * Writes
+	 * 
+	 */
+	override write() {
+
+		this.writer.VarUint32(this.index);
+
+	}
+
+	/**
+	 * 
 	 * Reads
 	 * 
 	 */

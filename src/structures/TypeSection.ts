@@ -37,6 +37,22 @@ export default class TypeSection extends _Base {
 
 	/**
 	 * 
+	 * Writes
+	 * 
+	 */
+	override write() {
+
+		const typeCount = this.entries.length;
+		this.writer.VarUint32(typeCount);
+		for (const entry of this.entries) {
+			entry.writer = this.writer;
+			entry.write();
+		}
+
+	}
+
+	/**
+	 * 
 	 * Reads
 	 * 
 	 */

@@ -36,6 +36,17 @@ export default class ElementType extends _Base {
 
 	/**
 	 * 
+	 * Writes
+	 * 
+	 */
+	override write() {
+
+		this.writer.VarUint32(this.type);
+
+	}
+
+	/**
+	 * 
 	 * Reads
 	 * 
 	 */

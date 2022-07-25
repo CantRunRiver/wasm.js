@@ -1,4 +1,5 @@
 // モジュールのインポート
+import * as Binary from "./../util/Binary";
 import _Base from "./_Base";
 
 import Instruction from "./Instruction";
@@ -27,7 +28,7 @@ export default class FunctionBody extends _Base {
 	 * 
 	 */
 	public "index": number;
-	
+
 	/**
 	 * 
 	 * local variables
@@ -55,6 +56,37 @@ export default class FunctionBody extends _Base {
 
 	/**
 	 * 
+	 * Writes
+	 * 
+	 */
+	override write() {
+
+		this.startAt = this.reader.at;
+
+		const bodyWriter = new Binary.BinaryWriter();
+
+		// ローカル変数
+		const localCount = this.localEntries.length;
+		bodyWriter.VarUint32(localCount);
+		for (const entry of this.localEntries) {
+			entry.writer = bodyWriter;
+			entry.write();
+		}
+
+		// コード本体
+		for (const instruction of this.code) {
+			instruction.writer = bodyWriter;
+			instruction.write();
+		}
+
+		const bodySize = bodyWriter.buffer.length;
+		this.writer.VarUint32(bodySize);
+		this.writer.bytes(bodyWriter.buffer);
+
+	}
+
+	/**
+	 * 
 	 * Reads
 	 * 
 	 */
@@ -62,7 +94,6 @@ export default class FunctionBody extends _Base {
 
 		this.startAt = this.reader.at;
 
-		// 解析
 		const bodySize = this.reader.VarUint32();
 
 		// ローカル変数
@@ -86,6 +117,7 @@ export default class FunctionBody extends _Base {
 			// チェック
 			if (instruction.opname === "end") {
 				if (depth <= 0) {
+					this.code.push(instruction);
 					break;
 				} else {
 					depth--;

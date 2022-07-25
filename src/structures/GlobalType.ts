@@ -45,6 +45,21 @@ export default class GlobalType extends _Base {
 
 	/**
 	 * 
+	 * Writes
+	 * 
+	 */
+	override write() {
+
+		const type = this.type;
+		type.writer = this.writer;
+		type.write();
+
+		this.writer.Boolean(this.mutability);
+
+	}
+
+	/**
+	 * 
 	 * Reads
 	 * 
 	 */

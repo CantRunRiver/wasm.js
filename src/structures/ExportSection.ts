@@ -33,7 +33,7 @@ export default class ExportSection extends _Base {
 	 * export entries
 	 * 
 	 */
-	"entries": Array<ExportEntry> = new Array();
+	public "entries": Array<ExportEntry> = new Array();
 
 	/**
 	 * 
@@ -42,6 +42,22 @@ export default class ExportSection extends _Base {
 	 */
 	constructor() {
 		super();
+	}
+
+	/**
+	 * 
+	 * Writes
+	 * 
+	 */
+	override write() {
+
+		const exportCount = this.entries.length;
+		this.writer.VarUint32(exportCount);
+		for (const entry of this.entries) {
+			entry.writer = this.writer;
+			entry.write();
+		}
+
 	}
 
 	/**

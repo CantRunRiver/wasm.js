@@ -49,6 +49,22 @@ export default class CodeSection extends _Base {
 	 * Reads
 	 * 
 	 */
+	override write() {
+
+		const bodyCount = this.bodies.length;
+		this.writer.VarUint32(bodyCount);
+		for (const functionBody of this.bodies) {
+			functionBody.writer = this.writer;
+			functionBody.write();
+		}
+
+	}
+
+	/**
+	 * 
+	 * Reads
+	 * 
+	 */
 	override read() {
 
 		this.startAt = this.reader.at;

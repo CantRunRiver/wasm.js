@@ -46,6 +46,20 @@ export default class LocalEntry extends _Base {
 
 	/**
 	 * 
+	 * Writes
+	 * 
+	 */
+	override write() {
+
+		this.writer.VarUint32(this.count);
+
+		this.type.writer = this.writer;
+		this.type.write();
+
+	}
+
+	/**
+	 * 
 	 * Reads
 	 * 
 	 */

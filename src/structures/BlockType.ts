@@ -37,6 +37,21 @@ export default class BlockType extends _Base {
 
 	/**
 	 * 
+	 * Writes
+	 * 
+	 */
+	override write() {
+
+		const typeID = ((this.type === null) ? 0x40 : Constants.ValueType[this.type]);
+		if (!typeID) {
+			throw new SyntaxError(`Invalid block type: ${this.type}`);
+		}
+		this.writer.Uint8(typeID);
+
+	}
+
+	/**
+	 * 
 	 * Reads
 	 * 
 	 */

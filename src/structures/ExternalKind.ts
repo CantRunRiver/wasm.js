@@ -36,6 +36,17 @@ export default class ExternalKind extends _Base {
 
 	/**
 	 * 
+	 * Writes
+	 * 
+	 */
+	override write() {
+
+		this.writer.VarUint32(this.kind);
+
+	}
+
+	/**
+	 * 
 	 * Reads
 	 * 
 	 */

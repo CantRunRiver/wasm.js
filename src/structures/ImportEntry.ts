@@ -66,6 +66,48 @@ export default class ImportEntry extends _Base {
 
 	/**
 	 * 
+	 * Writes
+	 * 
+	 */
+	override write() {
+
+		this.writer.String(this.module);
+		this.writer.String(this.field);
+
+		const externalKind = new ExternalKind();
+		externalKind.kind = this.kind;
+		externalKind.writer = this.writer;
+		externalKind.write();
+
+		switch (this.kind) {
+			case Constants.ExternalKind.Function: {
+				this.writer.VarUint32(this.type as number);
+				break;
+			}
+			case Constants.ExternalKind.Table: {
+				const type = this.type as TableType;
+				type.writer = this.writer;
+				type.write();
+				break;
+			}
+			case Constants.ExternalKind.Memory: {
+				const type = this.type as MemoryType;
+				type.writer = this.writer;
+				type.write();
+				break;
+			}
+			case Constants.ExternalKind.Global: {
+				const type = this.type as GlobalType;
+				type.writer = this.writer;
+				type.write();
+				break;
+			}
+		}
+
+	}
+
+	/**
+	 * 
 	 * Reads
 	 * 
 	 */

@@ -38,6 +38,20 @@ export default class MemoryType extends _Base {
 
 	/**
 	 * 
+	 * Writes
+	 * 
+	 */
+	override write() {
+
+		this.startAt = this.reader.at;
+
+		this.limits.writer = this.writer;
+		this.limits.write();
+
+	}
+
+	/**
+	 * 
 	 * Reads
 	 * 
 	 */

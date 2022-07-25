@@ -46,6 +46,23 @@ export default class TableType extends _Base {
 
 	/**
 	 * 
+	 * Writes
+	 * 
+	 */
+	override write() {
+
+		const elementType = this.type;
+		elementType.writer = this.writer;
+		elementType.write();
+
+		const resizableLimits = this.limits;
+		resizableLimits.writer = this.writer;
+		resizableLimits.write();
+
+	}
+
+	/**
+	 * 
 	 * Reads
 	 * 
 	 */

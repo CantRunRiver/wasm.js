@@ -52,6 +52,27 @@ export default class ElementSegment extends _Base {
 
 	/**
 	 * 
+	 * Writes
+	 * 
+	 */
+	override write() {
+
+		this.writer.VarUint32(this.index);
+
+		const offset = this.offset;
+		offset.writer = this.writer;
+		offset.write();
+
+		const elementCount = this.elements.length;
+		this.writer.VarUint32(elementCount);
+		for (const element of this.elements) {
+			this.writer.VarUint32(element);
+		}
+
+	}
+
+	/**
+	 * 
 	 * Reads
 	 * 
 	 */

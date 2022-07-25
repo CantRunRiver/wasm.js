@@ -49,6 +49,22 @@ export default class DataSection extends _Base {
 
 	/**
 	 * 
+	 * Writes
+	 * 
+	 */
+	override write() {
+
+		const dataSegmentCount = this.entries.length;
+		this.writer.VarUint32(dataSegmentCount);
+		for (const entry of this.entries) {
+			entry.writer = this.writer;
+			entry.write();
+		}
+
+	}
+
+	/**
+	 * 
 	 * Reads
 	 * 
 	 */

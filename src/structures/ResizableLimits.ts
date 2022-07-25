@@ -46,6 +46,22 @@ export default class ResizableLimits extends _Base {
 	 * Reads
 	 * 
 	 */
+	override write() {
+
+		const isMaximumFieldPresent = (typeof this.maximum !== "undefined");
+		this.writer.Boolean(isMaximumFieldPresent);
+		this.writer.VarUint32(this.initial);
+		if (isMaximumFieldPresent) {
+			this.writer.VarUint32(this.maximum!);
+		}
+
+	}
+
+	/**
+	 * 
+	 * Reads
+	 * 
+	 */
 	override read() {
 
 		this.startAt = this.reader.at;

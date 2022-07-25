@@ -52,6 +52,23 @@ export default class ExportEntry extends _Base {
 
 	/**
 	 * 
+	 * Writes
+	 * 
+	 */
+	override write() {
+
+		this.writer.String(this.field);
+
+		const kind = this.kind;
+		kind.writer = this.writer;
+		kind.write();
+
+		this.writer.VarUint32(this.index);
+
+	}
+
+	/**
+	 * 
 	 * Reads
 	 * 
 	 */

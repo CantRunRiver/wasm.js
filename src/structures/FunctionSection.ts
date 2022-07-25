@@ -44,6 +44,21 @@ export default class FunctionSection extends _Base {
 
 	/**
 	 * 
+	 * Writes
+	 * 
+	 */
+	override write() {
+
+		const count = this.types.length;
+		this.writer.VarUint32(count);
+		for (const type of this.types) {
+			this.writer.VarUint32(type);
+		}
+
+	}
+
+	/**
+	 * 
 	 * Reads
 	 * 
 	 */

@@ -47,6 +47,22 @@ export default class MemorySection extends _Base {
 
 	/**
 	 * 
+	 * Writes
+	 * 
+	 */
+	override write() {
+
+		const count = this.entries.length;
+		this.writer.VarUint32(count);
+		for (const entry of this.entries) {
+			entry.writer = this.writer;
+			entry.write();
+		}
+
+	}
+
+	/**
+	 * 
 	 * Reads
 	 * 
 	 */

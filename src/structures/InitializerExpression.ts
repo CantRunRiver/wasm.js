@@ -38,6 +38,20 @@ export default class InitializerExpression extends _Base {
 
 	/**
 	 * 
+	 * Writes
+	 * 
+	 */
+	override write() {
+
+		for (const instruction of this.initializerExpression) {
+			instruction.writer = this.writer;
+			instruction.write();
+		}
+
+	}
+
+	/**
+	 * 
 	 * Reads
 	 * 
 	 */
@@ -49,10 +63,10 @@ export default class InitializerExpression extends _Base {
 			const instruction = new Instruction();
 			instruction.reader = this.reader;
 			instruction.read();
+			this.initializerExpression.push(instruction);
 			if (instruction.opname === "end") {
 				break;
 			}
-			this.initializerExpression.push(instruction);
 		}
 
 		this.endAt = (this.reader.at - 1);

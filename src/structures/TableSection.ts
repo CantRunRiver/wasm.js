@@ -46,6 +46,22 @@ export default class TableSection extends _Base {
 
 	/**
 	 * 
+	 * Writes
+	 * 
+	 */
+	override write() {
+
+		const tableCount = this.entries.length;
+		this.writer.VarUint32(tableCount);
+		for (const entry of this.entries) {
+			entry.writer = this.writer;
+			entry.write();
+		}
+
+	}
+
+	/**
+	 * 
 	 * Reads
 	 * 
 	 */

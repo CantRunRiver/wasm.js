@@ -43,6 +43,18 @@ export default class InitializerExpression extends _Base {
 
 	/**
 	 * 
+	 * Writes
+	 * 
+	 */
+	override write() {
+
+		this.writer.VarUint32(this.flags);
+		this.writer.VarUint32(this.offset);
+
+	}
+
+	/**
+	 * 
 	 * Reads
 	 * 
 	 */

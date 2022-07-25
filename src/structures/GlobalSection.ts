@@ -47,6 +47,22 @@ export default class GlobalSection extends _Base {
 
 	/**
 	 * 
+	 * Writes
+	 * 
+	 */
+	override write() {
+
+		const count = this.globals.length;
+		this.writer.VarUint32(count);
+		for (const global of this.globals) {
+			global.writer = this.writer;
+			global.write();
+		}
+
+	}
+
+	/**
+	 * 
 	 * Reads
 	 * 
 	 */

@@ -46,6 +46,23 @@ export default class GlobalVariable extends _Base {
 
 	/**
 	 * 
+	 * Writes
+	 * 
+	 */
+	override write() {
+
+		const type = this.type;
+		type.writer = this.writer;
+		type.write();
+
+		const init = this.init;
+		init.writer = this.writer;
+		init.write();
+
+	}
+
+	/**
+	 * 
 	 * Reads
 	 * 
 	 */

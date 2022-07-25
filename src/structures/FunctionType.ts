@@ -52,6 +52,32 @@ export default class FunctionType extends _Base {
 
 	/**
 	 * 
+	 * Writes
+	 * 
+	 */
+	override write() {
+
+		this.writer.VarUint32(this.form);
+
+		const parameterCount = this.parameter_types.length;
+		this.writer.VarUint32(parameterCount);
+		for (const parameter_type of this.parameter_types) {
+			parameter_type.writer = this.writer;
+			parameter_type.write();
+		}
+
+		const returnCount = ((typeof this.return_type !== "undefined") ? 1 : 0);
+		this.writer.VarUint32(returnCount);
+		if (returnCount > 0) {
+			const return_type = this.return_type!;
+			return_type.writer = this.writer;
+			return_type.write();
+		}
+
+	}
+
+	/**
+	 * 
 	 * Reads
 	 * 
 	 */

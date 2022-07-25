@@ -52,6 +52,24 @@ export default class DataSegment extends _Base {
 
 	/**
 	 * 
+	 * Writes
+	 * 
+	 */
+	override write() {
+
+		this.writer.VarUint32(this.index);
+
+		const offset = this.offset;
+		offset.writer = this.writer;
+		offset.write();
+
+		this.writer.VarUint32(this.data.length);
+		this.writer.bytes(this.data);
+
+	}
+
+	/**
+	 * 
 	 * Reads
 	 * 
 	 */
