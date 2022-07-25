@@ -53,8 +53,11 @@ export default class Instruction extends _Base {
 	 * 
 	 */
 	public set opname(opname: Constants.Opname) {
-		const opcode = Object.keys(Constants.Opcode).indexOf(opname) as typeof Constants.Opcode[keyof typeof Constants.Opcode];
-		this.opcode = opcode;
+		const index = Object.keys(Constants.Opcode).indexOf(opname);
+		if (index === -1) {
+			throw new TypeError(`Invalid opname: ${opname}`);
+		}
+		this.opcode = Object.values(Constants.Opcode)[index] as typeof Constants.Opcode[keyof typeof Constants.Opcode];
 	}
 
 	/**
@@ -63,7 +66,11 @@ export default class Instruction extends _Base {
 	 * 
 	 */
 	public get opname(): Constants.Opname {
-		return Object.keys(Constants.Opcode)[Object.values(Constants.Opcode).indexOf(this.opcode)] as Constants.Opname;
+		const index = Object.values(Constants.Opcode).indexOf(this.opcode);
+		if (index === -1) {
+			throw new TypeError(`Invalid opcode: ${this.opcode}`);
+		}
+		return Object.keys(Constants.Opcode)[index] as Constants.Opname;
 	}
 
 	/**
