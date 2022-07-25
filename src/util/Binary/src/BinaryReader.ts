@@ -58,8 +58,6 @@ export default class BinaryReader {
 	 * 
 	 * Reads the buffer of specified length
 	 * 
-	 * @param length the length
-	 * 
 	 */
 	public bytes(length: number): Uint8Array {
 		const bytes = this.buffer.slice(this.at, (this.at + length));
@@ -188,15 +186,7 @@ export default class BinaryReader {
 	 * 
 	 */
 	public VarUint32(): number {
-		let number = 0;
-		for (let i = 0; i < 32; i += 7) {
-			const byte = this.Uint8();
-			number |= ((byte & 0x7F) << i);
-			if ((byte & 0x80) === 0) {
-				break;
-			}
-		}
-		return number;
+		return Number(this.VarUint64());
 	}
 
 	/**
@@ -205,9 +195,7 @@ export default class BinaryReader {
 	 * 
 	 */
 	public VarInt32(): number {
-		const uint = this.VarUint32();
-		const number = ((uint >> 0) ^ (0 - (uint & 1)));
-		return number;
+		return Number(this.VarInt64());
 	}
 
 	/**
@@ -215,15 +203,15 @@ export default class BinaryReader {
 	 * Reads variable-length unsigned 64-bit integer (ULEB128)
 	 * 
 	 */
-	public VarUint64(): number {
-		let number = 0;
-		for (let i = 0; i < 64; i += 7) {
-			const byte = this.Uint8();
-			number |= (byte << i);
-			if ((byte & 0x80) === 0) {
-				break;
-			}
-		}
+	public VarUint64(): bigint {
+		let number = 0n;
+		let byte = 0n;
+		let shift = 0;
+		do {
+			byte = BigInt(this.Uint8());
+			number |= ((byte & 0x7Fn) << BigInt(shift));
+			shift += 7;
+		} while (byte >= 0x80n);
 		return number;
 	}
 
@@ -232,9 +220,18 @@ export default class BinaryReader {
 	 * Reads variable-length signed 64-bit integer (ULEB128)
 	 * 
 	 */
-	public VarInt64(): number {
-		const uint = this.VarUint64();
-		const number = ((uint >> 0) ^ (0 - (uint & 1)));
+	public VarInt64(): bigint {
+		let number = 0n;
+		let byte = 0n;
+		let shift = 0;
+		do {
+			byte = BigInt(this.Uint8());
+			number |= ((byte & 0x7Fn) << BigInt(shift));
+			shift += 7;
+		} while (byte >= 0x80n);
+		if ((byte & 0x40n) !== 0n) {
+			number |= (-1n << BigInt(shift));
+		}
 		return number;
 	}
 

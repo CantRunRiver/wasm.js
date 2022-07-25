@@ -33,6 +33,18 @@ export default class BinaryWriter {
 
 	/**
 	 * 
+	 * Writes the bytes
+	 * 
+	 */
+	public bytes(bytes: Uint8Array): BinaryWriter {
+		for (const byte of bytes) {
+			this.Uint8(byte);
+		}
+		return this;
+	}
+
+	/**
+	 * 
 	 * Writes unsigned 8-bit integer
 	 * 
 	 */
@@ -163,18 +175,7 @@ export default class BinaryWriter {
 	 * 
 	 */
 	public VarUint32(number: number): BinaryWriter {
-		if (number === 0) {
-			this.Uint8(0x00);
-		} else {
-			do {
-				let byte = (number & (0x80 - 1));
-				number >>= 7;
-				if (number > 0) {
-					byte |= 0x80;
-				}
-				this.Uint8(byte);
-			} while (number > 0);
-		}
+		this.VarUint64(BigInt(number));
 		return this;
 	}
 
@@ -184,11 +185,7 @@ export default class BinaryWriter {
 	 * 
 	 */
 	public VarInt32(number: number): BinaryWriter {
-		let uint = (number * 2);
-		if (number < 0) {
-			uint = -(number * 2 + 1);
-		}
-		this.VarUint32(uint);
+		this.VarInt64(BigInt(number));
 		return this;
 	}
 
@@ -197,21 +194,15 @@ export default class BinaryWriter {
 	 * Writes variable-length unsigned 64-bit integer (ULEB128)
 	 * 
 	 */
-	public VarUint64(number: number): BinaryWriter {
-		let bigint = BigInt(number);
-		if (bigint === 0n) {
-			this.Uint8(0x00);
-		} else {
-			do {
-				let byte: (number | bigint) = (bigint & (0x80n - 1n));
-				bigint >>= 7n;
-				if (bigint > 0n) {
-					byte |= 0x80n;
-				}
-				byte = (Number(byte & 0xFFFFFFFFn) | 0);
-				this.Uint8(byte);
-			} while (bigint > 0);
-		}
+	public VarUint64(number: bigint): BinaryWriter {
+		do {
+			let byte = (number & 0x7Fn);
+			number >>= 7n;
+			if (number !== 0n) {
+				byte |= 0x80n;
+			}
+			this.Uint8(Number(byte));
+		} while ((number !== 0n));
 		return this;
 	}
 
@@ -220,12 +211,27 @@ export default class BinaryWriter {
 	 * Writes variable-length signed 64-bit integer (ULEB128)
 	 * 
 	 */
-	public VarInt64(number: number): BinaryWriter {
-		let uint = (number * 2);
-		if (number < 0) {
-			uint = -(number * 2 + 1);
-		}
-		this.VarUint64(uint);
+	public VarInt64(number: bigint): BinaryWriter {
+		let hasMore: boolean;
+		do {
+			let byte = (number & 0x7Fn);
+			number >>= 7n;
+			hasMore = !(
+				(
+					(number === 0n) &&
+					((byte & 0x40n) == 0n)
+				)
+				||
+				(
+					(number === -1n) &&
+					((byte & 0x40n) !== 0n)
+				)
+			)
+			if (hasMore) {
+				byte |= 0x80n;
+			}
+			this.Uint8(Number(byte));
+		} while (hasMore);
 		return this;
 	}
 
