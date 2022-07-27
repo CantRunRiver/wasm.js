@@ -75,70 +75,70 @@ export default class Instruction extends _Base {
 
 	/**
 	 * 
-	 * 
+	 * immediates
 	 * 
 	 */
 	public "immediates": {
 
 		/**
 		 * 
-		 * 
+		 * ???
 		 * 
 		 */
 		"type"?: BlockType;
 
 		/**
 		 * 
-		 * 
+		 * ???
 		 * 
 		 */
 		"depth"?: number;
 
 		/**
 		 * 
-		 * 
+		 * ???
 		 * 
 		 */
 		"entires"?: Array<number>;
 
 		/**
 		 * 
-		 * 
+		 * ???
 		 * 
 		 */
 		"default"?: number;
 
 		/**
 		 * 
-		 * 
+		 * ???
 		 * 
 		 */
 		"index"?: number;
 
 		/**
 		 * 
-		 * 
+		 * ???
 		 * 
 		 */
 		"reserved"?: boolean;
 
 		/**
 		 * 
-		 * 
+		 * ???
 		 * 
 		 */
 		"flags"?: MemoryImmediate["flags"];
 
 		/**
 		 * 
-		 * 
+		 * ???
 		 * 
 		 */
 		"offset"?: MemoryImmediate["offset"];
 
 		/**
 		 * 
-		 * 
+		 * ???
 		 * 
 		 */
 		"value"?: (number | bigint);
@@ -183,29 +183,59 @@ export default class Instruction extends _Base {
 			}
 			case "br":
 			case "br_if": {
-				this.writer.VarUint32(this.immediates.depth!);
+				if (typeof this.immediates.depth !== "number") {
+					throw new TypeError(`Invalid immediates.depth: ${this.immediates.depth}`);
+				}
+				this.writer.VarUint32(this.immediates.depth);
 				break;
 			}
 			case "br_table": {
-				const targetCount = this.immediates.entires!.length;
-				this.writer.VarUint32(targetCount);
-				for (const targetEntry of this.immediates.entires!) {
-					this.writer.VarUint32(targetEntry);
+
+				if (!Array.isArray(this.immediates.entires)) {
+					throw new TypeError(`Invalid immediates.entires: ${this.immediates.entires}`);
 				}
-				this.writer.VarUint32(this.immediates.default!);
+
+				const targetCount = this.immediates.entires.length;
+				this.writer.VarUint32(targetCount);
+				this.immediates.entires.forEach((targetEntry, i) => {
+					if (typeof targetEntry !== "number") {
+						throw new TypeError(`Invalid immediates.entires[${i}]: ${targetEntry}`);
+					}
+					this.writer.VarUint32(targetEntry);
+				});
+
+				if (typeof this.immediates.default !== "number") {
+					throw new TypeError(`Invalid immediates.default: ${this.immediates.default}`);
+				}
+				this.writer.VarUint32(this.immediates.default);
+
 				break;
+
 			}
 			case "return": {
 				break;
 			}
 			case "call": {
-				this.writer.VarUint32(this.immediates.index!);
+				if (typeof this.immediates.index !== "number") {
+					throw new TypeError(`Invalid immediates.index: ${this.immediates.index}`);
+				}
+				this.writer.VarUint32(this.immediates.index);
 				break;
 			}
 			case "call_indirect": {
-				this.writer.VarUint32(this.immediates.index!);
-				this.writer.Boolean(this.immediates.reserved!);
+
+				if (typeof this.immediates.index !== "number") {
+					throw new TypeError(`Invalid immediates.index: ${this.immediates.index}`);
+				}
+
+				this.writer.VarUint32(this.immediates.index);
+				if (typeof this.immediates.reserved !== "boolean") {
+					throw new TypeError(`Invalid immediates.reserved: ${this.immediates.reserved}`);
+				}
+				this.writer.Boolean(this.immediates.reserved);
+
 				break;
+
 			}
 			case "drop":
 			case "select": {
@@ -214,13 +244,19 @@ export default class Instruction extends _Base {
 			case "local.get":
 			case "local.set":
 			case "local.tee": {
-				const localIndex = this.immediates.index!;
+				if (typeof this.immediates.index !== "number") {
+					throw new TypeError(`Invalid immediates.index: ${this.immediates.index}`);
+				}
+				const localIndex = this.immediates.index;
 				this.writer.VarUint32(localIndex);
 				break;
 			}
 			case "global.get":
 			case "global.set": {
-				const globalIndex = this.immediates.index!;
+				if (typeof this.immediates.index !== "number") {
+					throw new TypeError(`Invalid immediates.index: ${this.immediates.index}`);
+				}
+				const globalIndex = this.immediates.index;
 				this.writer.VarUint32(globalIndex);
 				break;
 			}
@@ -256,27 +292,42 @@ export default class Instruction extends _Base {
 			}
 			case "memory.size":
 			case "memory.grow": {
-				const reserved = this.immediates.reserved!;
+				if (typeof this.immediates.reserved !== "boolean") {
+					throw new TypeError(`Invalid immediates.reserved: ${this.immediates.reserved}`);
+				}
+				const reserved = this.immediates.reserved;
 				this.writer.Boolean(reserved);
 				break;
 			}
 			case "i32.const": {
-				const value = this.immediates.value! as number;
+				if (typeof this.immediates.value !== "number") {
+					throw new TypeError(`Invalid immediates.value: ${this.immediates.value}`);
+				}
+				const value = this.immediates.value as number;
 				this.writer.VarInt32(value);
 				break;
 			}
 			case "i64.const": {
-				const value = this.immediates.value! as bigint;
+				if (typeof this.immediates.value !== "bigint") {
+					throw new TypeError(`Invalid immediates.value: ${this.immediates.value}`);
+				}
+				const value = this.immediates.value as bigint;
 				this.writer.VarInt64(value);
 				break;
 			}
 			case "f32.const": {
-				const value = this.immediates.value! as number;
+				if (typeof this.immediates.value !== "number") {
+					throw new TypeError(`Invalid immediates.value: ${this.immediates.value}`);
+				}
+				const value = this.immediates.value as number;
 				this.writer.Float32(value);
 				break;
 			}
 			case "f64.const": {
-				const value = this.immediates.value! as number;
+				if (typeof this.immediates.value !== "number") {
+					throw new TypeError(`Invalid immediates.value: ${this.immediates.value}`);
+				}
+				const value = this.immediates.value as number;
 				this.writer.Float64(value);
 				break;
 			}

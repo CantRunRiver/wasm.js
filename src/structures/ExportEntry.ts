@@ -57,12 +57,18 @@ export default class ExportEntry extends _Base {
 	 */
 	override write() {
 
+		if (typeof this.field !== "string") {
+			throw new TypeError(`Invalid field name: ${this.field}`);
+		}
 		this.writer.String(this.field);
 
 		const kind = this.kind;
 		kind.writer = this.writer;
 		kind.write();
 
+		if (typeof this.index !== "number") {
+			throw new TypeError(`Invalid the index into the corresponding index space: ${this.index}`);
+		}
 		this.writer.VarUint32(this.index);
 
 	}

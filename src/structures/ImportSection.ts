@@ -23,7 +23,7 @@ export default class ImportSection extends _Base {
 
 	/**
 	 * 
-	 * Section ID
+	 * section identifier
 	 * 
 	 */
 	public readonly "id" = Constants.Section.Import;

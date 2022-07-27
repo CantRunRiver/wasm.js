@@ -20,7 +20,7 @@ export default class ResizableLimits extends _Base {
 
 	/**
 	 * 
-	 * length
+	 * initial length
 	 * 
 	 */
 	public "initial": number;
@@ -50,8 +50,16 @@ export default class ResizableLimits extends _Base {
 
 		const isMaximumFieldPresent = (typeof this.maximum !== "undefined");
 		this.writer.Boolean(isMaximumFieldPresent);
+
+		if (typeof this.initial !== "number") {
+			throw new TypeError(`Invalid initial length: ${this.initial}`);
+		}
 		this.writer.VarUint32(this.initial);
+
 		if (isMaximumFieldPresent) {
+			if (typeof this.maximum !== "number") {
+				throw new TypeError(`Invalid maximum length: ${this.maximum}`);
+			}
 			this.writer.VarUint32(this.maximum!);
 		}
 

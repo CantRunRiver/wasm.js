@@ -22,7 +22,7 @@ export default class DataSegment extends _Base {
 
 	/**
 	 * 
-	 * [the linear memory](https://github.com/WebAssembly/design/blob/main/Modules.md#linear-memory-index-space) index
+	 * the [linear memory index](https://github.com/WebAssembly/design/blob/main/Modules.md#linear-memory-index-space) index
 	 * 
 	 */
 	public "index": number
@@ -57,13 +57,19 @@ export default class DataSegment extends _Base {
 	 */
 	override write() {
 
+		if (typeof this.index !== "number") {
+			throw new TypeError(`Invalid the linear memory index: ${this.index}`);
+		}
 		this.writer.VarUint32(this.index);
 
 		const offset = this.offset;
 		offset.writer = this.writer;
 		offset.write();
 
-		this.writer.VarUint32(this.data.length);
+		if (!(this.data instanceof Uint8Array)) {
+			throw new TypeError(`Invalid data sequence: ${this.data}`);
+		}
+		this.writer.VarUint32(this.data.byteLength);
 		this.writer.bytes(this.data);
 
 	}
@@ -78,6 +84,9 @@ export default class DataSegment extends _Base {
 		this.startAt = this.reader.at;
 
 		this.index = this.reader.VarUint32();
+		if (typeof this.index !== "number") {
+			throw new TypeError(`Invalid the linear memory index: ${this.index}`);
+		}
 
 		const offset = new InitializerExpression();
 		offset.reader = this.reader;

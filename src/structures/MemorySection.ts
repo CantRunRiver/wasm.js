@@ -23,7 +23,7 @@ export default class MemorySection extends _Base {
 
 	/**
 	 * 
-	 * Section ID
+	 * section identifier
 	 * 
 	 */
 	public readonly "id" = Constants.Section.Memory;

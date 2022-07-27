@@ -24,10 +24,10 @@ export default class FunctionBody extends _Base {
 
 	/**
 	 * 
-	 * the index of function
+	 * Gets the index of function
 	 * 
 	 */
-	public "index": number;
+	public "getFunctionIndex": () => number;
 
 	/**
 	 * 
@@ -75,6 +75,9 @@ export default class FunctionBody extends _Base {
 
 		// コード本体
 		for (const instruction of this.code) {
+			if (!instruction) {
+				continue;
+			}
 			instruction.writer = bodyWriter;
 			instruction.write();
 		}

@@ -116,14 +116,30 @@ export default class Parser {
 		// 設定
 		let functionIndexOffset = 0;
 		for (const section of sections) {
+			const offset = functionIndexOffset;
 			switch (section.id) {
+				case Constants.Section.Type: {
+					section.entries.forEach((entry, i) => {
+						entry.getTypeIndex = () => i;
+					});
+					break;
+				}
 				case Constants.Section.Import: {
-					functionIndexOffset = section.entries.length
+					section.entries.forEach((entry, i) => {
+						entry.getFunctionIndex = () => (i + offset);
+					});
+					functionIndexOffset = section.entries.length;
+					break;
+				}
+				case Constants.Section.Function: {
+					section.types.forEach((type, i) => {
+						type.getFunctionIndex = () => (i + offset);
+					});
 					break;
 				}
 				case Constants.Section.Code: {
 					section.bodies.forEach((body, i) => {
-						body.index = (i + functionIndexOffset);
+						body.getFunctionIndex = () => (i + offset);
 					});
 					break;
 				}

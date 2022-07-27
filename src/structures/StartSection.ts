@@ -21,7 +21,7 @@ export default class StartSection extends _Base {
 
 	/**
 	 * 
-	 * Section ID
+	 * section identifier
 	 * 
 	 */
 	public readonly "id" = Constants.Section.Start;
@@ -49,6 +49,9 @@ export default class StartSection extends _Base {
 	 */
 	override write() {
 
+		if (typeof this.index !== "number") {
+			throw new TypeError(`Invalid start type: ${this.index}`);
+		}
 		this.writer.VarUint32(this.index);
 
 	}

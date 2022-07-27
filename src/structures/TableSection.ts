@@ -23,21 +23,21 @@ export default class TableSection extends _Base {
 
 	/**
 	 * 
-	 * Section ID
+	 * section identifier
 	 * 
 	 */
 	public readonly "id" = Constants.Section.Table;
 
 	/**
 	 * 
-	 * ???
+	 * `table_type` entries
 	 * 
 	 */
 	public "entries": Array<TableType> = new Array();
 
 	/**
 	 * 
-	 * ???
+	 * The table section contains zero or more definitions of distinct tables.
 	 * 
 	 */
 	constructor() {

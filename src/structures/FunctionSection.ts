@@ -21,17 +21,33 @@ export default class FunctionSection extends _Base {
 
 	/**
 	 * 
-	 * Section ID
+	 * section identifier
 	 * 
 	 */
 	public readonly "id" = Constants.Section.Function;
 
 	/**
 	 * 
-	 * sequence of indices into the type section
+	 * 
 	 * 
 	 */
-	public "types": Array<number> = new Array();
+	public "types": Array<{
+
+		/**
+		 * 
+		 * Gets the index of function
+		 * 
+		 */
+		"getFunctionIndex": () => number,
+
+		/**
+		 * 
+		 * sequence of indices into the type section
+		 * 
+		 */
+		"type": number
+
+	}> = new Array();
 
 	/**
 	 * 
@@ -52,7 +68,7 @@ export default class FunctionSection extends _Base {
 		const count = this.types.length;
 		this.writer.VarUint32(count);
 		for (const type of this.types) {
-			this.writer.VarUint32(type);
+			this.writer.VarUint32(type.type);
 		}
 
 	}
@@ -69,7 +85,10 @@ export default class FunctionSection extends _Base {
 		const count = this.reader.VarUint32();
 		for (let i = 0; i < count; i++) {
 			const type = this.reader.VarUint32();
-			this.types.push(type);
+			this.types.push({
+				"getFunctionIndex": () => NaN,
+				"type": type
+			});
 		}
 
 		this.endAt = (this.reader.at - 1);

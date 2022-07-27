@@ -22,7 +22,7 @@ export default class ElementSegment extends _Base {
 
 	/**
 	 * 
-	 * [the linear memory](https://github.com/WebAssembly/design/blob/main/Modules.md#linear-memory-index-space) index
+	 * the [table memory](https://github.com/WebAssembly/design/blob/main/Modules.md#table-index-space)
 	 * 
 	 */
 	public "index": number
@@ -43,7 +43,7 @@ export default class ElementSegment extends _Base {
 
 	/**
 	 * 
-	 * ???
+	 * Element segment
 	 * 
 	 */
 	constructor() {
@@ -57,6 +57,9 @@ export default class ElementSegment extends _Base {
 	 */
 	override write() {
 
+		if (typeof this.index !== "number") {
+			throw new Error(`Invalid the table index: ${this.index}`)
+		}
 		this.writer.VarUint32(this.index);
 
 		const offset = this.offset;
@@ -65,9 +68,12 @@ export default class ElementSegment extends _Base {
 
 		const elementCount = this.elements.length;
 		this.writer.VarUint32(elementCount);
-		for (const element of this.elements) {
+		this.elements.forEach((element, i) => {
+			if (typeof element !== "number") {
+				throw new Error(`Invalid sequence of function indices[${i}]: ${this.index}`)
+			}
 			this.writer.VarUint32(element);
-		}
+		});
 
 	}
 

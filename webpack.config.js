@@ -7,6 +7,9 @@ module.exports = {
 	"entry": "./dist/index.js",
 	"output": {
 		"filename": "./index.browser.min.js",
-		"path": path.join(__dirname, "/")
+		"path": path.join(__dirname, "/"),
+		"library": "WebAssemblyJS",
+		"libraryExport": "default",
+		"libraryTarget": "var",
 	}
 };

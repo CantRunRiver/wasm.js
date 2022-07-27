@@ -48,7 +48,14 @@ export default class InitializerExpression extends _Base {
 	 */
 	override write() {
 
+		if (typeof this.flags !== "number") {
+			throw new TypeError(`Invalid a bitfield which currently contains the alignment in the least significant bits: ${this.flags}`);
+		}
 		this.writer.VarUint32(this.flags);
+
+		if (typeof this.offset !== "number") {
+			throw new TypeError(`Invalid the value of the offset: ${this.offset}`);
+		}
 		this.writer.VarUint32(this.offset);
 
 	}

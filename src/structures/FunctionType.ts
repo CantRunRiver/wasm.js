@@ -22,6 +22,13 @@ export default class FunctionType extends _Base {
 
 	/**
 	 * 
+	 * Gets the index of type
+	 * 
+	 */
+	public "getTypeIndex": () => number;
+
+	/**
+	 * 
 	 * the value for the `func` type constructor as defined above
 	 * 
 	 */
@@ -57,6 +64,9 @@ export default class FunctionType extends _Base {
 	 */
 	override write() {
 
+		if (typeof this.form !== "number") {
+			throw new TypeError(`Invalid form: ${this.form}`);
+		}
 		this.writer.VarUint32(this.form);
 
 		const parameterCount = this.parameter_types.length;

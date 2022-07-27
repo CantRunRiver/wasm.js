@@ -23,14 +23,14 @@ export default class TableType extends _Base {
 
 	/**
 	 * 
-	 * ???
+	 * the type of elements
 	 * 
 	 */
 	public "type": ElementType;
 
 	/**
 	 * 
-	 * ???
+	 * A packed tuple that describes the limits of a [table](https://github.com/WebAssembly/design/blob/main/Semantics.md#table) or [memory](https://github.com/WebAssembly/design/blob/main/Semantics.md#resizing).
 	 * 
 	 */
 	public "limits": ResizableLimits;

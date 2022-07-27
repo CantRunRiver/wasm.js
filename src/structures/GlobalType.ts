@@ -29,7 +29,7 @@ export default class GlobalType extends _Base {
 
 	/**
 	 * 
-	 * ???
+	 * `false` if immutable, `true` if mutable
 	 * 
 	 */
 	public "mutability": boolean;
@@ -54,6 +54,9 @@ export default class GlobalType extends _Base {
 		type.writer = this.writer;
 		type.write();
 
+		if (typeof this.mutability !== "boolean") {
+			throw new TypeError(`Invalid mutability: ${this.mutability}`);
+		}
 		this.writer.Boolean(this.mutability);
 
 	}

@@ -15,6 +15,7 @@ import StartSection from "./structures/StartSection";
 import ElementSection from "./structures/ElementSection";
 import CodeSection from "./structures/CodeSection";
 import DataSection from "./structures/DataSection";
+import { StdioNull } from "child_process";
 
 /**
  * 
@@ -70,7 +71,7 @@ export default class Parser {
 	 * Builds the WebAssembly buffer
 	 *
 	 */
-	public build(sections: Array<Section>): Uint8Array {
+	public build(sections: Array<Section | (null | undefined)>): Uint8Array {
 
 		this.writer = new Binary.BinaryWriter();
 
@@ -82,6 +83,9 @@ export default class Parser {
 			this.console.log("Building the sections...");
 		}
 		for (const section of sections) {
+			if (!section) {
+				continue;
+			}
 			this.buildSection(section);
 		}
 

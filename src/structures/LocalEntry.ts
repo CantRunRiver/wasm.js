@@ -22,7 +22,7 @@ export default class LocalEntry extends _Base {
 
 	/**
 	 * 
-	 * number of local variables of the following type
+	 * number of local variables
 	 * 
 	 */
 	public "count": number;
@@ -51,6 +51,9 @@ export default class LocalEntry extends _Base {
 	 */
 	override write() {
 
+		if (typeof this.count !== "number") {
+			throw new TypeError(`Invalid number of local variables: ${this.count}`);
+		}
 		this.writer.VarUint32(this.count);
 
 		this.type.writer = this.writer;

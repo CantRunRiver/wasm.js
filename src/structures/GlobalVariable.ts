@@ -37,7 +37,7 @@ export default class GlobalVariable extends _Base {
 
 	/**
 	 * 
-	 * 
+	 * ???
 	 * 
 	 */
 	constructor() {

@@ -26,6 +26,13 @@ export default class ImportEntry extends _Base {
 
 	/**
 	 * 
+	 * Gets the index of function
+	 * 
+	 */
+	public "getFunctionIndex": () => number;
+
+	/**
+	 * 
 	 * name
 	 * 
 	 */
@@ -80,23 +87,23 @@ export default class ImportEntry extends _Base {
 		externalKind.write();
 
 		switch (this.kind) {
-			case Constants.ExternalKind.Function: {
+			case "Function": {
 				this.writer.VarUint32(this.type as number);
 				break;
 			}
-			case Constants.ExternalKind.Table: {
+			case "Table": {
 				const type = this.type as TableType;
 				type.writer = this.writer;
 				type.write();
 				break;
 			}
-			case Constants.ExternalKind.Memory: {
+			case "Memory": {
 				const type = this.type as MemoryType;
 				type.writer = this.writer;
 				type.write();
 				break;
 			}
-			case Constants.ExternalKind.Global: {
+			case "Global": {
 				const type = this.type as GlobalType;
 				type.writer = this.writer;
 				type.write();
@@ -124,25 +131,25 @@ export default class ImportEntry extends _Base {
 		this.kind = externalKind.kind;
 
 		switch (this.kind) {
-			case Constants.ExternalKind.Function: {
+			case "Function": {
 				this.type = this.reader.VarUint32();
 				break;
 			}
-			case Constants.ExternalKind.Table: {
+			case "Table": {
 				const type = new TableType();
 				type.reader = this.reader;
 				type.read();
 				this.type = type
 				break;
 			}
-			case Constants.ExternalKind.Memory: {
+			case "Memory": {
 				const type = new MemoryType();
 				type.reader = this.reader;
 				type.read();
 				this.type = type;
 				break;
 			}
-			case Constants.ExternalKind.Global: {
+			case "Global": {
 				const type = new GlobalType();
 				type.reader = this.reader;
 				type.read();

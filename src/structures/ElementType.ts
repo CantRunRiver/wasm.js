@@ -41,6 +41,9 @@ export default class ElementType extends _Base {
 	 */
 	override write() {
 
+		if (typeof this.type !== "number") {
+			throw new TypeError(`Invalid element type: ${this.type}`);
+		}
 		this.writer.VarUint32(this.type);
 
 	}

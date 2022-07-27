@@ -42,9 +42,12 @@ export default class ValueType extends _Base {
 	 */
 	override write() {
 
+		if (typeof this.type !== "string") {
+			throw new TypeError(`Invalid block type: ${this.type}`);
+		}
 		const typeID = Constants.ValueType[this.type];
 		if (typeof typeID === "undefined") {
-			throw new SyntaxError(`Invalid block type: ${this.type}`);
+			throw new TypeError(`Invalid block type: ${this.type}`);
 		}
 		this.writer.VarUint32(typeID);
 
