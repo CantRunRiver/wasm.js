@@ -4,18 +4,6 @@ import Console from "./util/Console";
 import * as Binary from "./util/Binary";
 
 import { Section } from "./structures/Section";
-import TypeSection from "./structures/TypeSection";
-import ImportSection from "./structures/ImportSection";
-import FunctionSection from "./structures/FunctionSection";
-import TableSection from "./structures/TableSection";
-import MemorySection from "./structures/MemorySection";
-import GlobalSection from "./structures/GlobalSection";
-import ExportSection from "./structures/ExportSection";
-import StartSection from "./structures/StartSection";
-import ElementSection from "./structures/ElementSection";
-import CodeSection from "./structures/CodeSection";
-import DataSection from "./structures/DataSection";
-import { StdioNull } from "child_process";
 
 /**
  * 
